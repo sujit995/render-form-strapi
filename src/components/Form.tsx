@@ -1,5 +1,5 @@
 import { BsPaperclip } from 'react-icons/bs';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import '../styles/form.css';
 import { useForm } from 'react-hook-form';
 import InputForm from './InputForm';
@@ -28,16 +28,28 @@ const veteran = ['I am a veteran', 'I am not a verteran', 'Decline to self ident
 
 const Form = (props: Props) => {
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const { register, handleSubmit, formState: { errors, isSubmitSuccessful }, reset } = useForm();
 
-  const [captchaVerify, setCaptchaVerify] = useState(false);
+  const [isCaptchaClicked, setIsCaptchaClicked] = useState(false);
+  const [showCaptchaError,setShowCaptchaError] = useState(false);
   const [resumeLabel, setResumeLabel] = useState('Attach Resume/CV')
   const [resumeError, setResumeError] = useState('null')
 
+  const onChange = () => {
+    setIsCaptchaClicked(true);
+    setShowCaptchaError(false);
+  }
 
-  const addData = (data: { [x: string]: any }) => {
+  useEffect(()=>{
+    if(isSubmitSuccessful){
+      setIsCaptchaClicked(false)
+    reset()
+    }
+  },[isSubmitSuccessful,reset])
 
+  const addData = (data: any) => {
 
+    if (isCaptchaClicked) {
     const storageRef = ref(storage, new UUID().getDashFreeUUID())
     const uploadTask = uploadBytesResumable(storageRef, data.Resume[0])
 
@@ -60,7 +72,12 @@ const Form = (props: Props) => {
         });
       }
     )
+    setIsCaptchaClicked(false);
+  }else{
+    setShowCaptchaError(true);
   }
+  }
+
 
   const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.files && e.currentTarget.files[0]) {
@@ -80,7 +97,7 @@ const Form = (props: Props) => {
   return (
     <div className="form_container">
       <form onSubmit={handleSubmit((data) => {
-        if (Object.keys(errors).length == 0) {
+        if (Object.keys(errors).length == 0 && resumeError==='null') {
           addData(data)
         }
       })}>
@@ -113,14 +130,14 @@ const Form = (props: Props) => {
           <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
           <div className="col-lg-10">
             <label>If you'd like, please share your pronouns with us.</label>
-            <input className="form-control" placeholder="Type your Response" />
+            <input className="form-control shadow-none" placeholder="Type your Response" />
           </div>
         </div>
 
         <div className="col-lg-8 p-auto m-auto pt-4">
           <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
           <div className="col-lg-10">
-            <textarea className="form-control rounded-0" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
+            <textarea className="form-control rounded-0 shadow-none" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
             {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
           </div>
         </div>
@@ -164,11 +181,10 @@ const Form = (props: Props) => {
         <div className="mt-4 pt-4" style={{ textAlign: "center" }}>
           <ReCAPTCHA
             sitekey="6LdN4pQeAAAAANseEyYQT_JZ9re6_ag2k05c7SZt"
-            onChange={() => setCaptchaVerify(true)}
-            onErrored={() => setCaptchaVerify(false)}
+            onChange={onChange}
             style={{ display: 'inline-block' }}
           />
-          {Object.keys(errors).length > 0 && !captchaVerify && <p>Please Select Captcha</p>}
+           {showCaptchaError?<p>Captcha not clicked</p>:<></>}
         </div>
         <div className="container bg-light">
           <div className="col-md-12 text-center mt-4 pt-4">
