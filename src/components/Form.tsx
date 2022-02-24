@@ -1,129 +1,183 @@
-import React from 'react'
 import { BsPaperclip } from 'react-icons/bs';
+import { useState } from "react";
 import '../styles/form.css';
+import { useForm } from 'react-hook-form';
+import InputForm from './InputForm';
+import ReCAPTCHA from "react-google-recaptcha";
+import { db, storage } from '../config/firebase';
+import { collection, addDoc } from "firebase/firestore";
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { UUID } from 'uuid-generator-ts';
+
 
 type Props = {}
 
 
+const gender = ['Male', 'Female', 'Decline to self identify']
+const race = ['Hispanic or Latino', 'White (Not Hispanic or Latino)', 'Black or African American (Not Hispanic or Latino)', 'Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)', 'Asian (Not Hispanic or Latino)', 'American Indian or Alaska Native (Not Hispanic or Latino)', 'Two or More Races (Not Hispanic or Latino)']
+const veteran = ['I am a veteran', 'I am not a verteran', 'Decline to self identify']
+
+// const schema = yup.object().shape({
+//   Resume: yup
+//   .mixed()
+//   .required('you need to provide a file')
+//   .test("filesize", "The file is too large", (value) => {
+//     return value && value[0].size <= 5000000
+//   }),
+// })
+
 const Form = (props: Props) => {
+
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
+
+  const [captchaVerify, setCaptchaVerify] = useState(false);
+  const [resumeLabel, setResumeLabel] = useState('Attach Resume/CV')
+  const [resumeError, setResumeError] = useState('null')
+
+
+  const addData = (data: { [x: string]: any }) => {
+
+
+    const storageRef = ref(storage, new UUID().getDashFreeUUID())
+    const uploadTask = uploadBytesResumable(storageRef, data.Resume[0])
+
+    uploadTask.on('state_changed',
+      (snapshot) => (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+      (error) => {
+        console.log('something went wrong', error)
+      }, () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          data.Resume = downloadURL;
+          addDoc(collection(db, 'candidates'), data)
+            .then(() => {
+              alert('added to database')
+
+            }).catch((e) => {
+              alert("error" + e)
+              const deleteRef = ref(storage, downloadURL)
+              deleteObject(deleteRef)
+            })
+        });
+      }
+    )
+  }
+
+  const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
+    if (e.currentTarget.files && e.currentTarget.files[0]) {
+      setResumeLabel(e.currentTarget.files[0].name)
+      if (e.currentTarget.files[0].type !== 'application/pdf')
+        setResumeError('Invalid File Format')
+      else if (e.currentTarget.files[0].size > 5 * 1024 * 1024)
+        setResumeError('File size is greater than 5MB')
+      else
+        setResumeError('null')
+    } else {
+      setResumeError('This field is required')
+    }
+  }
+
+
   return (
     <div className="form_container">
-      <div className="col-lg-8 p-auto m-auto">
-        <h4 className="col-lg-6 heading">SUBMIT YOUR APPLICATION</h4>
-        <div className="d-flex">
-          <label className="col-lg-3">Resume/CV<span>✱</span></label>
-          <div className="file__wrapper">
-                <button className="upload__button" disabled><BsPaperclip style={{color:'#515357',marginRight:'13px'}}/>attach resume/cv</button>
-                <input className="file__input" type='file' accept='application/pdf' />
+      <form onSubmit={handleSubmit((data) => {
+        if (Object.keys(errors).length == 0) {
+          addData(data)
+        }
+      })}>
+        <div className="col-lg-8 p-auto m-auto">
+          <h4 className="col-lg-6 heading">SUBMIT YOUR APPLICATION</h4>
+          <div className="row d-flex mt-4 m-3">
+            <label className="col-lg-3">Resume/CV<span className="star">✱</span></label>
+            <div className="col-lg-6 file__wrapper">
+              <button className="upload__button" disabled><BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}</button>
+              <input className="file__input" type='file' onInput={(e) => onInputChage(e)} {...register('Resume')} />
+              {errors.Resume && <p>{errors.picture.message}</p>}
+            </div>
           </div>
+          <InputForm type='text' label='Full Name' register={register} error={errors} />
+          <InputForm type='email' label='Email' register={register} error={errors} />
+          <InputForm type='text' label='Phone' register={register} error={errors} />
+          <InputForm type='text' label='Current Company' register={register} error={errors} />
         </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Full Name<span>✱</span></label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Email<span>✱</span></label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Phone</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Current Company</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-      </div>
 
-      <div className="col-lg-8 p-auto m-auto">
-        <h4 className="col-lg-6 heading">Links</h4>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">LinkedIn URL</label>
-          <input type="text" className="col-lg-6" id="formInput" />
+        <div className="col-lg-8 p-auto m-auto">
+          <h4 className="col-lg-6 heading">Links</h4>
+          <InputForm type='url' label='LinkedIn URL' register={register} error={errors} />
+          <InputForm type='url' label='Twitter URL' register={register} error={errors} />
+          <InputForm type='url' label='GitHub URL' register={register} error={errors} />
+          <InputForm type='url' label='Portfolio URL' register={register} error={errors} />
+          <InputForm type='url' label='Other website' register={register} error={errors} />
         </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Twitter URL</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Github URL</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Portfolio URL</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Other Website</label>
-          <input type="text" className="col-lg-6" id="formInput" />
-        </div>
-      </div>
 
-      <div className="col-lg-8 p-auto m-auto">
-        <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
-        <div className="col-lg-10">
+        <div className="col-lg-8 p-auto m-auto">
+          <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
+          <div className="col-lg-10">
             <label>If you'd like, please share your pronouns with us.</label>
             <input className="form-control" placeholder="Type your Response" />
+          </div>
         </div>
-      </div>
 
-      <div className="col-lg-8 p-auto m-auto pt-4">
-        <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
-        <div className="col-lg-10">
-          <textarea className="form-control rounded-0" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height:'130px'}}></textarea>
+        <div className="col-lg-8 p-auto m-auto pt-4">
+          <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
+          <div className="col-lg-10">
+            <textarea className="form-control rounded-0" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
+            {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
+          </div>
         </div>
-      </div>
 
-      <div className="col-lg-8 m-auto pt-4">
-        <hr className="col-lg-10"/>
-      </div>
+        <div className="col-lg-8 m-auto pt-4">
+          <hr className="col-lg-10" />
+        </div>
 
-      <div className="col-lg-8 m-auto">
-        <h4 className="col-lg-10 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION <span style={{ fontSize:'.8rem'}}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
-        <p className="col-lg-10">Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
-      </div>
+        <div className="col-lg-8 m-auto">
+          <h4 className="col-lg-10 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
+          <p className="col-lg-10">Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
+        </div>
 
-      <div className="col-lg-8 p-auto m-auto">
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Gender</label>
-          <select className="col-lg-6 selectpicker">
-            <option title="Combo 1">Select...</option>
-            <option title="Combo 2">Male</option>
-            <option title="Combo 3">Female</option>
-            <option title="Combo 4">Decline to self-identify</option>
-          </select>
+        <div className="col-lg-8 p-auto m-auto">
+          <div className="row d-flex mt-4 m-3">
+            <label className="col-lg-3">Gender</label>
+            <select className="col-lg-6 selectpicker" {...register('Gender', { required: true })}>
+              <option title="Combo 1">Select...</option>
+              {
+                gender.map(item => <option value={item}>{item}</option>)
+              }
+              {errors?.Gender && <p>Select Gender Value</p>}
+            </select>
+          </div>
+          <div className="row d-flex mt-4 m-3">
+            <label className="col-lg-3">Race</label>
+            <select className="col-lg-6 selectpicker" {...register('Race')}>
+              <option>Select ...</option>
+              {race.map(item => <option value={item}>{item}</option>)}
+            </select>
+          </div>
+          <div className="row d-flex mt-4 m-3">
+            <label className="col-lg-3">Veteran Status</label>
+            <select className="col-lg-6 selectpicker" {...register('Veteran')}>
+              <option>Select ...</option>
+              {veteran.map(item => <option value={item}>{item}</option>)}
+            </select>
+          </div>
         </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Race</label>
-          <select className="col-lg-6 selectpicker">
-            <option>Select ...</option>
-            <option>Hispanic or Latino</option>
-            <option>White (Not Hispanic or Latino)</option>
-            <option>Black or African American (Not Hispanic or Latino)</option>
-            <option>Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)</option>
-            <option>Asian (Not Hispanic or Latino)</option>
-            <option>American Indian or Alaska Native (Not Hispanic or Latino)</option>
-            <option>Two or More Races (Not Hispanic or Latino)</option>
-            <option>Decline to self-identify</option>
-          </select>
+
+        <div className="mt-4 pt-4" style={{ textAlign: "center" }}>
+          <ReCAPTCHA
+            sitekey="6LdN4pQeAAAAANseEyYQT_JZ9re6_ag2k05c7SZt"
+            onChange={() => setCaptchaVerify(true)}
+            onErrored={() => setCaptchaVerify(false)}
+            style={{ display: 'inline-block' }}
+          />
+          {Object.keys(errors).length > 0 && !captchaVerify && <p>Please Select Captcha</p>}
         </div>
-        <div className="d-flex mt-4">
-          <label className="col-lg-3">Gender</label>
-          <select className="col-lg-6 selectpicker">
-            <option>Select ...</option>
-            <option>I am a veteran</option>
-            <option>I am not a veteran</option>
-            <option>Decline to self-identify</option>
-          </select>
+        <div className="container bg-light">
+          <div className="col-md-12 text-center mt-4 pt-4">
+            <button type="submit" className="btn">Submit Application</button>
+          </div>
         </div>
-      </div>
-      <div className="container bg-light">
-        <div className="col-md-12 text-center mt-4 pt-4">
-            <button type="button" className="btn btn">Submit Application</button>
-        </div>
-    </div>
+      </form>
     </div>
   )
 }
 
-export default Form
+export default Form;
