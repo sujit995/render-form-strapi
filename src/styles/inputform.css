@@ -1,0 +1,14 @@
+.error__field{
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    flex: 1;
+  }
+  .error__field p{
+    font-size: 17.5px;
+  }
+
+  .star{
+    color: #ff794f;
+    font:normal 400 9px/1.8 Lato;
+  }
