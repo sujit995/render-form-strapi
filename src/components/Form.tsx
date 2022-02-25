@@ -55,10 +55,7 @@ const Form = (props: Props) => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             data.Resume = downloadURL;
             addDoc(collection(db, 'candidates'), data)
-              .then(() => {
-                alert('added to database')
-
-              }).catch((e) => {
+            .catch((e) => {
                 alert("error" + e)
                 const deleteRef = ref(storage, downloadURL)
                 deleteObject(deleteRef)
@@ -75,7 +72,7 @@ const Form = (props: Props) => {
 
   const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.files && e.currentTarget.files[0]) {
-      setResumeLabel(e.currentTarget.files[0].name)
+         setResumeLabel(e.currentTarget.files[0].name)
       if (e.currentTarget.files[0].type !== 'application/pdf')
         setResumeError('Invalid File Format')
       else if (e.currentTarget.files[0].size > 5 * 1024 * 1024)
@@ -102,7 +99,7 @@ const Form = (props: Props) => {
             <div className="col-lg-6 file__wrapper">
               <button className="upload__button" disabled><BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}</button>
               <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
-              {errors.Resume && <p>{errors.picture.message}</p>}
+              {errors.Resume && <p style={{ color: 'red' }}>{errors.picture.message}</p>}
             </div>
           </div>
           <InputForm type='text' label='Full Name' register={register} error={errors} />
@@ -149,7 +146,7 @@ const Form = (props: Props) => {
               {
                 gender.map(item => <option value={item}>{item}</option>)
               }
-              {errors?.Gender && <p>Select Gender Value</p>}
+              {errors?.Gender && <p style={{ color: 'red' }}>Select Gender Value</p>}
             </select>
           </div>
           <div className="row d-flex mt-4 m-3">
@@ -218,7 +215,7 @@ const Form = (props: Props) => {
             onChange={onChange}
             style={{ display: 'inline-block' }}
           />
-          {showCaptchaError ? <p>Captcha not clicked</p> : <></>}
+          {showCaptchaError ? <p style={{ color: 'red' }}>Captcha not clicked</p> : <></>}
         </div>
         <div className="container bg-light">
           <div className="col-md-12 text-center mt-4 pt-4">
