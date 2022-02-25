@@ -153,51 +153,51 @@ const Form = (props: Props) => {
             </select>
           </div>
           <div className="row d-flex mt-4 m-3">
-            <label className="col-lg-3">Race&nbsp;&nbsp;<AiOutlineInfoCircle style={{cursor:'pointer'}} onClick={() => setRaceDescription(!raceDescription)} /></label>
+            <label className="col-lg-3">Race&nbsp;&nbsp;<AiOutlineInfoCircle style={{ cursor: 'pointer' }} onClick={() => setRaceDescription(!raceDescription)} /></label>
             <select className="col-lg-6 selectpicker" {...register('Race')}>
               <option>Select ...</option>
               {race.map(item => <option value={item}>{item}</option>)}
             </select>
             {
               raceDescription ?
-              <div className="row d-flex mt-4">
-                <label className="col-lg-3"></label>
-                <ul className="col-lg-6" style={{ listStyle: 'none'}}>
-                  <li>
-                    <div>Hispanic or Latino</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>
-                      A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.
-                    </div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>White (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>
-                      A person having origins in any of the original peoples of Europe, the Middle East, or North Africa.
-                    </div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>Black or African American (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>
-                      A person having origins in any of the black racial groups of Africa.
-                    </div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.</div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>Asian (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.</div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>American Indian or Alaska Native (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>A person having origins in any of the original peoples of North and South America (including Central America), and who maintain tribal affiliation or community attachment.</div>
-                  </li>
-                  <li>
-                    <div style={{marginTop:'5px'}}>Two or More Races (Not Hispanic or Latino)</div>
-                    <div style={{ color: '#555659', fontSize: '12px', marginTop:'5px' }}>All persons who identify with more than one of the above five races.</div>
-                  </li>
-                </ul>
+                <div className="row d-flex mt-4">
+                  <label className="col-lg-3"></label>
+                  <ul className="col-lg-6" style={{ listStyle: 'none' }}>
+                    <li>
+                      <div>Hispanic or Latino</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>
+                        A person of Cuban, Mexican, Puerto Rican, South or Central American, or other Spanish culture or origin regardless of race.
+                      </div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>White (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>
+                        A person having origins in any of the original peoples of Europe, the Middle East, or North Africa.
+                      </div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>Black or African American (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>
+                        A person having origins in any of the black racial groups of Africa.
+                      </div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>Native Hawaiian or Other Pacific Islander (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>A person having origins in any of the peoples of Hawaii, Guam, Samoa, or other Pacific Islands.</div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>Asian (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian Subcontinent, including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam.</div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>American Indian or Alaska Native (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>A person having origins in any of the original peoples of North and South America (including Central America), and who maintain tribal affiliation or community attachment.</div>
+                    </li>
+                    <li>
+                      <div style={{ marginTop: '5px' }}>Two or More Races (Not Hispanic or Latino)</div>
+                      <div style={{ color: '#555659', fontSize: '12px', marginTop: '5px' }}>All persons who identify with more than one of the above five races.</div>
+                    </li>
+                  </ul>
                 </div>
                 : null
             }
@@ -214,7 +214,7 @@ const Form = (props: Props) => {
 
         <div className="mt-4 pt-4" style={{ textAlign: "center" }}>
           <ReCAPTCHA
-            sitekey="6LdN4pQeAAAAANseEyYQT_JZ9re6_ag2k05c7SZt"
+            sitekey="6LeunJ4eAAAAANvbVY0arNQLaXnK9Rpzz0nrDXl3"
             onChange={onChange}
             style={{ display: 'inline-block' }}
           />
