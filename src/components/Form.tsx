@@ -214,7 +214,7 @@ const Form = (props: Props) => {
 
         <div className="mt-4 pt-4" style={{ textAlign: "center" }}>
           <ReCAPTCHA
-            sitekey="6LdArJ4eAAAAALklfaDnaAYfSMM9xdyENjTajIEj"
+            sitekey="6LeYtZ4eAAAAAM2r_q_OSZRgMf4TdjdTTLo7CZDc"
             onChange={onChange}
             style={{ display: 'inline-block' }}
           />
