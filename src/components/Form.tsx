@@ -36,10 +36,13 @@ const Form = (props: Props) => {
 
   useEffect(() => {
     if (isSubmitSuccessful) {
-      setIsCaptchaClicked(false)
-      reset()
-    }
-  }, [isSubmitSuccessful, reset])
+      setTimeout(() => {
+        setResumeLabel('Attach Resume/CV')
+        reset()
+      }, 500)
+      alert("file added successfully")
+    } 
+  }, [isSubmitSuccessful])
 
   const addData = (data: any) => {
 
@@ -55,7 +58,7 @@ const Form = (props: Props) => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             data.Resume = downloadURL;
             addDoc(collection(db, 'candidates'), data)
-            .catch((e) => {
+              .catch((e) => {
                 alert("error" + e)
                 const deleteRef = ref(storage, downloadURL)
                 deleteObject(deleteRef)
@@ -72,7 +75,7 @@ const Form = (props: Props) => {
 
   const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
     if (e.currentTarget.files && e.currentTarget.files[0]) {
-         setResumeLabel(e.currentTarget.files[0].name)
+      setResumeLabel(e.currentTarget.files[0].name)
       if (e.currentTarget.files[0].type !== 'application/pdf')
         setResumeError('Invalid File Format')
       else if (e.currentTarget.files[0].size > 5 * 1024 * 1024)
@@ -93,10 +96,10 @@ const Form = (props: Props) => {
         }
       })}>
         <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-6 heading">SUBMIT YOUR APPLICATION</h4>
+          <h4 className="col-lg-6 ml-3 heading">SUBMIT YOUR APPLICATION</h4>
           <div className="row d-flex mt-4 m-3">
             <label className="col-lg-3">Resume/CV<span className="star">✱</span></label>
-            <div className="col-lg-6 file__wrapper">
+            <div className="col-lg-5 file__wrapper">
               <button className="upload__button" disabled><BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}</button>
               <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
               {errors.Resume && <p style={{ color: 'red' }}>{errors.picture.message}</p>}
@@ -109,7 +112,7 @@ const Form = (props: Props) => {
         </div>
 
         <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-6 heading">Links</h4>
+          <h4 className="col-lg-7 ml-3 heading">Links</h4>
           <InputForm type='url' label='LinkedIn URL' register={register} error={errors} />
           <InputForm type='url' label='Twitter URL' register={register} error={errors} />
           <InputForm type='url' label='GitHub URL' register={register} error={errors} />
@@ -118,30 +121,30 @@ const Form = (props: Props) => {
         </div>
 
         <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
-          <div className="col-lg-10">
+          <h4 className="col-lg-6 ml-3 heading">PREFERRED PRONOUNS</h4>
+          <div className="col-lg-11 ml-3">
             <label>If you'd like, please share your pronouns with us.</label>
             <input className="form-control shadow-none" placeholder="Type your Response" />
           </div>
         </div>
 
         <div className="col-lg-8 p-auto m-auto pt-4">
-          <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
-          <div className="col-lg-10">
+          <h4 className="col-lg-6 ml-3 heading">PREFERRED PRONOUNS</h4>
+          <div className="col-lg-11 ml-3">
             <textarea className="form-control rounded-0 shadow-none" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
             {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
           </div>
         </div>
 
         <div className="col-lg-8 m-auto">
-          <h4 className="col-lg-10 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
-          <p className="col-lg-10">Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
+          <h4 className="col-lg-11 ml-3 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', textTransform:'capitalize' }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
+          <p className="col-lg-11 ml-3" style={{lineHeight:'2rem'}}>Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
         </div>
 
         <div className="col-lg-8 p-auto m-auto">
           <div className="row d-flex mt-4 m-3">
             <label className="col-lg-3">Gender</label>
-            <select className="col-lg-6 selectpicker" {...register('Gender', { required: true })}>
+            <select className="col-lg-7 selectpicker" {...register('Gender', { required: true })}>
               <option title="Combo 1">Select...</option>
               {
                 gender.map(item => <option value={item}>{item}</option>)
@@ -151,7 +154,7 @@ const Form = (props: Props) => {
           </div>
           <div className="row d-flex mt-4 m-3">
             <label className="col-lg-3">Race&nbsp;&nbsp;<AiOutlineInfoCircle style={{ cursor: 'pointer' }} onClick={() => setRaceDescription(!raceDescription)} /></label>
-            <select className="col-lg-6 selectpicker" {...register('Race')}>
+            <select className="col-lg-7 selectpicker" {...register('Race')}>
               <option>Select ...</option>
               {race.map(item => <option value={item}>{item}</option>)}
             </select>
@@ -202,7 +205,7 @@ const Form = (props: Props) => {
           </div>
           <div className="row d-flex mt-4 m-3">
             <label className="col-lg-3">Veteran Status</label>
-            <select className="col-lg-6 selectpicker" {...register('Veteran')}>
+            <select className="col-lg-7 selectpicker" {...register('Veteran')}>
               <option>Select ...</option>
               {veteran.map(item => <option value={item}>{item}</option>)}
             </select>

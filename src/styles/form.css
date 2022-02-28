@@ -87,3 +87,7 @@
     left:0px;
     cursor:pointer;
 }
+
+select{
+    height: '30px'
+}
