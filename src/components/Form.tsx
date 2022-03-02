@@ -4,11 +4,8 @@ import '../styles/form.css';
 import { useForm } from 'react-hook-form';
 import InputForm from './InputForm';
 import ReCAPTCHA from "react-google-recaptcha";
-import { db, storage } from '../config/firebase';
-import { collection, addDoc } from "firebase/firestore";
-import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { UUID } from 'uuid-generator-ts';
 import { AiOutlineInfoCircle } from 'react-icons/ai';
+import { uploadData } from '../config/strapi';
 
 
 type Props = {}
@@ -44,33 +41,7 @@ const Form = (props: Props) => {
     } 
   }, [isSubmitSuccessful])
 
-  const addData = (data: any) => {
-
-    if (isCaptchaClicked) {
-      const storageRef = ref(storage, new UUID().getDashFreeUUID())
-      const uploadTask = uploadBytesResumable(storageRef, data.Resume[0])
-
-      uploadTask.on('state_changed',
-        (snapshot) => (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
-        (error) => {
-          console.log('something went wrong', error)
-        }, () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            data.Resume = downloadURL;
-            addDoc(collection(db, 'candidates'), data)
-              .catch((e) => {
-                alert("error" + e)
-                const deleteRef = ref(storage, downloadURL)
-                deleteObject(deleteRef)
-              })
-          });
-        }
-      )
-      setIsCaptchaClicked(false);
-    } else {
-      setShowCaptchaError(true);
-    }
-  }
+ 
 
 
   const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
@@ -92,7 +63,7 @@ const Form = (props: Props) => {
     <div className="form_container">
       <form onSubmit={handleSubmit((data) => {
         if (Object.keys(errors).length == 0 && resumeError === 'null') {
-          addData(data)
+          uploadData(data)
         }
       })}>
         <div className="col-lg-8 p-auto m-auto">
