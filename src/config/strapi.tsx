@@ -16,16 +16,15 @@ export const uploadData=async(sendData:any)=>{
     uploadForm(sendData)   
 }
 
-const uploadForm=async(d:any)=>{
+const uploadForm=async(formData:any)=>{
 
     var sendData: {[key: string]: any} = {};
-    sendData.data = d;
+    sendData.data = formData;
     
     const upload_status = await axios({
         method:"POST",
         url:'http://localhost:1337/api/forms',
         data:sendData
     })
-    console.log(upload_status);
-    alert('SUBMITTED SUCCESSFULLY')   
+    console.log(upload_status)
 }

@@ -100,7 +100,7 @@ const Form = (props: Props) => {
         </div>
 
         <div className="col-lg-8 p-auto m-auto pt-4">
-          <h4 className="col-lg-6 ml-3 heading">PREFERRED PRONOUNS</h4>
+          <h4 className="col-lg-6 ml-3 heading">ADDITIONAL INFORMATION</h4>
           <div className="col-lg-11 ml-3">
             <textarea className="form-control rounded-0 shadow-none" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
             {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
@@ -108,7 +108,7 @@ const Form = (props: Props) => {
         </div>
 
         <div className="col-lg-8 m-auto">
-          <h4 className="col-lg-11 ml-3 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', textTransform:'capitalize' }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
+          <h4 className="col-lg-11 ml-3 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', textTransform:'none' }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
           <p className="col-lg-11 ml-3" style={{lineHeight:'2rem'}}>Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
         </div>
 
