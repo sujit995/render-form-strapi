@@ -56,8 +56,8 @@ const toPascalCase = (sentence:string) => sentence
 export const InputForm:React.FC<Props> = ({type,label,placeholder,register,error}):JSX.Element => {
   return (
     <>
-      <div className="row d-flex mt-4 m-3">
-      <label className="col-lg-3 mt-1">{label}{checkRequired(label)?<span className="star">✱</span>:null}</label>
+      <div className="row d-flex mx-auto mt-4">
+      <label className="col-lg-3 mt-2">{label}{checkRequired(label)?<span className="star">✱</span>:null}</label>
       <input className="col-lg-7" id="formInput" { ...register?{...register(toPascalCase(label),getValidation(label))}:null } type={type} placeholder={placeholder} />
             {error?error[toPascalCase(label)]?.type === 'required' && <p style={{color:'red', minWidth:'300px'}}>This Field is required</p>:null}
             {error?error[toPascalCase(label)]?.type === 'pattern' && <p style={{color:'red', minWidth:'300px'}}>{label==='Phone'?`Invalid Phone number`:`Invalid ${label}`}</p>:null}

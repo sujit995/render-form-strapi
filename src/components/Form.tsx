@@ -66,13 +66,15 @@ const Form = (props: Props) => {
           uploadData(data)
         }
       })}>
-        <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-6 ml-3 heading">SUBMIT YOUR APPLICATION</h4>
-          <div className="row d-flex mt-4 m-3">
-            <label className="col-lg-3">Resume/CV<span className="star">✱</span></label>
-            <div className="col-lg-5 file__wrapper">
-              <button className="upload__button" disabled><BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}</button>
-              <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
+        <div className="col-lg-8 mx-auto">
+          <h4 className="col-lg-6 heading">SUBMIT YOUR APPLICATION</h4>
+          <div className="row d-flex mx-auto">
+            <label className="col-md-3">Resume/CV<span className="star">✱</span></label>
+            <div className="col-md-9">
+            <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
+              <button className="upload__button" disabled>
+              <BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}
+              </button>
               {errors.Resume && <p style={{ color: 'red' }}>{errors.picture.message}</p>}
             </div>
           </div>
@@ -82,8 +84,8 @@ const Form = (props: Props) => {
           <InputForm type='text' label='Current Company' register={register} error={errors} />
         </div>
 
-        <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-7 ml-3 heading">Links</h4>
+        <div className="col-lg-8 mx-auto">
+          <h4 className="col-lg-7 heading">Links</h4>
           <InputForm type='url' label='LinkedIn URL' register={register} error={errors} />
           <InputForm type='url' label='Twitter URL' register={register} error={errors} />
           <InputForm type='url' label='GitHub URL' register={register} error={errors} />
@@ -91,17 +93,17 @@ const Form = (props: Props) => {
           <InputForm type='url' label='Other website' register={register} error={errors} />
         </div>
 
-        <div className="col-lg-8 p-auto m-auto">
-          <h4 className="col-lg-6 ml-3 heading">PREFERRED PRONOUNS</h4>
-          <div className="col-lg-11 ml-3">
+        <div className="col-lg-8 mx-auto">
+          <h4 className="col-lg-6 heading">PREFERRED PRONOUNS</h4>
+          <div className="col-lg-11">
             <label>If you'd like, please share your pronouns with us.</label>
             <input className="form-control shadow-none" placeholder="Type your Response" />
           </div>
         </div>
 
-        <div className="col-lg-8 p-auto m-auto pt-4">
-          <h4 className="col-lg-6 ml-3 heading">ADDITIONAL INFORMATION</h4>
-          <div className="col-lg-11 ml-3">
+        <div className="col-lg-8 mx-auto">
+          <h4 className="col-lg-6 heading">ADDITIONAL INFORMATION</h4>
+          <div className="col-lg-11">
             <textarea className="form-control rounded-0 shadow-none" id="formControlTextarea" placeholder="Add a cover letter or anything else you want to share." style={{ height: '130px' }} {...register('TextArea', { minLength: 30 })} />
             {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
           </div>
@@ -191,10 +193,8 @@ const Form = (props: Props) => {
           />
           {showCaptchaError ? <p style={{ color: 'red' }}>Captcha not clicked</p> : <></>}
         </div>
-        <div className="container bg-light">
-          <div className="col-md-12 text-center mt-4 pt-4">
-            <button type="submit" className="btn">Submit Application</button>
-          </div>
+        <div className="d-flex mt-4">
+            <input type="submit" className="submit__button mx-auto text-center" value="SUBMIT APPLICATION" />
         </div>
       </form>
     </div>
