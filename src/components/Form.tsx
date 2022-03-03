@@ -38,10 +38,8 @@ const Form = (props: Props) => {
         reset()
       }, 500)
       alert("file added successfully")
-    } 
+    }
   }, [isSubmitSuccessful])
-
- 
 
 
   const onInputChage = (e: React.FormEvent<HTMLInputElement>) => {
@@ -71,9 +69,9 @@ const Form = (props: Props) => {
           <div className="row d-flex mx-auto">
             <label className="col-md-3">Resume/CV<span className="star">✱</span></label>
             <div className="col-md-9">
-            <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
+              <input className="file__input" type='file' accept='application/pdf' onInput={(e) => onInputChage(e)} {...register('Resume')} />
               <button className="upload__button" disabled>
-              <BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}
+                <BsPaperclip style={{ color: '#515357', marginRight: '13px' }} />{resumeLabel}
               </button>
               {errors.Resume && <p style={{ color: 'red' }}>{errors.picture.message}</p>}
             </div>
@@ -108,14 +106,13 @@ const Form = (props: Props) => {
             {errors?.TextArea?.type === 'minLength' && <p style={{ color: 'red' }}>Min Length should be 30 characters</p>}
           </div>
         </div>
-
-        <div className="col-lg-8 m-auto">
-          <h4 className="col-lg-11 ml-3 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', textTransform:'none' }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
-          <p className="col-lg-11 ml-3" style={{lineHeight:'2rem'}}>Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
+        
+        <div className="col-lg-8 mx-auto">
+          <h4 className="col-lg-11 heading">U.S. EQUAL EMPLOYMENT OPPORTUNITY INFORMATION &nbsp;&nbsp; <span style={{ fontSize: '.8rem', textTransform: 'none' }}>(Completion is voluntary and will not subject you to adverse treatment)</span></h4>
+          <p className="col-lg-11" style={{ lineHeight: '2rem' }}>Our company values diversity. To ensure that we comply with reporting requirements and to learn more about how we can increase diversity in our candidate pool, we invite you to voluntarily provide demographic information in a confidential survey at the end of this application. Providing this information is optional. It will not be accessible or used in the hiring process, and has no effect on your opportunity for employment.</p>
         </div>
-
-        <div className="col-lg-8 p-auto m-auto">
-          <div className="row d-flex mt-4 m-3">
+        <div className="col-lg-8 mt-4 mx-auto">
+          <div className="row d-flex mt-4 m-2">
             <label className="col-lg-3">Gender</label>
             <select className="col-lg-7 selectpicker" {...register('Gender', { required: true })}>
               <option title="Combo 1">Select...</option>
@@ -125,7 +122,7 @@ const Form = (props: Props) => {
               {errors?.Gender && <p style={{ color: 'red' }}>Select Gender Value</p>}
             </select>
           </div>
-          <div className="row d-flex mt-4 m-3">
+          <div className="row d-flex mt-4 m-2">
             <label className="col-lg-3">Race&nbsp;&nbsp;<AiOutlineInfoCircle style={{ cursor: 'pointer' }} onClick={() => setRaceDescription(!raceDescription)} /></label>
             <select className="col-lg-7 selectpicker" {...register('Race')}>
               <option>Select ...</option>
@@ -176,7 +173,7 @@ const Form = (props: Props) => {
             }
 
           </div>
-          <div className="row d-flex mt-4 m-3">
+          <div className="row d-flex mt-4 m-2">
             <label className="col-lg-3">Veteran Status</label>
             <select className="col-lg-7 selectpicker" {...register('Veteran')}>
               <option>Select ...</option>
@@ -194,7 +191,7 @@ const Form = (props: Props) => {
           {showCaptchaError ? <p style={{ color: 'red' }}>Captcha not clicked</p> : <></>}
         </div>
         <div className="d-flex mt-4">
-            <input type="submit" className="submit__button mx-auto text-center" value="SUBMIT APPLICATION" />
+          <input type="submit" className="submit__button mx-auto text-center" value="SUBMIT APPLICATION" />
         </div>
       </form>
     </div>

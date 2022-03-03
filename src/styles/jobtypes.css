@@ -1,5 +1,4 @@
 .contain{
-    width:70%;
     height:fit-content;
     font-family: 'Lato', sans-serif;
     line-height:1.4;
@@ -9,12 +8,19 @@
     margin-top:120px;
     margin-left:auto;
     margin-right:auto;
-    box-sizing: border-box;
+    
 }
- 
+/*  
 @media (max-width:768px){
     .contain{
         width:90%;
         padding:12px;
+    } 
+} */
+
+@media (max-width:991px){
+    .contain{
+        margin-left: 0%;
+        width: 100%;
     } 
 }
